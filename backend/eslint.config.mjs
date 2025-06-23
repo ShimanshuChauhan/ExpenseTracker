@@ -7,7 +7,7 @@ export default [
       // Best Practices
       'no-unused-vars': ['warn', { argsIgnorePattern: '^_', varsIgnorePattern: '^process$' }], // Warn for unused vars, ignore "_" prefix
       'no-undef': 'warn', // Warn for undefined variables
-      'no-console': 'warn', // Warn when using console.log
+      // 'no-console': 'warn', // Warn when using console.log
       'eqeqeq': ['error', 'always'], // Enforce strict equality (`===` and `!==`)
       'curly': ['error', 'all'], // Require curly braces for all control structures
       'arrow-parens': ['error', 'always'], // Always use parentheses in arrow functions
