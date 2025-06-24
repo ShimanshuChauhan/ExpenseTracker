@@ -1,7 +1,7 @@
 import express from 'express';
 
 import { protect } from '../controllers/authController.js';
-import { createExpense, getAllExpenses, getExpenseById, updateExpense } from '../controllers/expenseController.js';
+import { createExpense, deleteExpense, getAllExpenses, getExpenseById, updateExpense } from '../controllers/expenseController.js';
 
 const router = express.Router();
 
@@ -14,6 +14,7 @@ router
 router
   .route('/:id')
   .get(getExpenseById)
-  .patch(updateExpense);
+  .patch(updateExpense)
+  .delete(deleteExpense);
 
 export default router;
