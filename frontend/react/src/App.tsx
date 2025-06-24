@@ -1,16 +1,19 @@
-import { LayoutDashboard, Settings, Wallet } from "lucide-react";
-
-import { Sidebar, SidebarItem } from "./components/Sidebar";
+import { Routes, Route } from "react-router-dom";
+import { MainLayout } from "./layouts/MainLayout";
+import Dashboard from "./pages/Dashboard";
+import Expenses from "./pages/Expenses";
+import Settings from "./pages/Settings";
 
 
 export default function App() {
   return (
-    <div>
-      <Sidebar>
-        <SidebarItem icon={LayoutDashboard} text="Dashboard" />
-        <SidebarItem icon={Wallet} text="Expenses" />
-        <SidebarItem icon={Settings} text="Settings" />
-      </Sidebar>
-    </div>
+    <Routes>
+      <Route path="/" element={<MainLayout />} >
+        <Route index element={<Dashboard />} />
+        <Route path="dashboard" element={<Dashboard />} />
+        <Route path="expenses" element={<Expenses />} />
+        <Route path="settings" element={<Settings />} />
+      </Route>
+    </Routes>
   )
 }
