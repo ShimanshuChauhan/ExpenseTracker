@@ -5,6 +5,7 @@ dotenv.config({ path: './config.env' });
 
 import userRouter from './routes/userRouter.js';
 import AppError from './utils/appError.js';
+import globalErrorHandler from './controllers/errorController.js';
 
 const app = express();
 
@@ -28,5 +29,6 @@ app.all(/(.*)/, (req, res, next) => {
   next(new AppError(`Can't find ${req.originalUrl} on this server!`, 404));
 });
 
+app.use(globalErrorHandler);
 
 export default app;
