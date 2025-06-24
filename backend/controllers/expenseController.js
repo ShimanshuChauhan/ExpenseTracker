@@ -2,6 +2,18 @@ import expenseModel from '../models/expenseModel.js';
 import catchAsync from '../utils/catchAsync.js';
 import AppError from '../utils/appError.js';
 
+export const getAllExpenses = catchAsync(async (req, res, next) => {
+  const expenses = await expenseModel.find({ user: req.user.id }).sort({ date: -1 });
+
+  res.status(200).json({
+    status: 'success',
+    results: expenses.length,
+    data: {
+      expenses
+    }
+  });
+});
+
 export const createExpense = catchAsync(async (req, res, next) => {
   const { amount, description, category, date } = req.body;
 
