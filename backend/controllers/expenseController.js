@@ -36,3 +36,23 @@ export const createExpense = catchAsync(async (req, res, next) => {
     }
   });
 });
+
+export const getExpenseById = catchAsync(async (req, res, next) => {
+  const expenseId = req.params.id;
+  const expense = await expenseModel.findById(expenseId);
+
+  if (!expense) {
+    return next(new AppError('No expense found with that ID', 404));
+  }
+
+  if (expense.user.toString() !== req.user.id) {
+    return next(new AppError('You do not have permission to view this expense', 403));
+  }
+
+  res.status(200).json({
+    status: 'success',
+    data: {
+      expense
+    }
+  });
+});
