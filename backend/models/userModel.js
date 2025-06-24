@@ -20,13 +20,8 @@ const userSchema = new mongoose.Schema({
     required: true,
     minlength: 6,
     select: false // Do not return password in queries
-  },
-
-  createdAt: {
-    type: Date,
-    default: Date.now
   }
-});
+}, { timestamps: true });
 
 userSchema.pre('save', async function (next) {
   this.password = await bcrypt.hash(this.password, 12);

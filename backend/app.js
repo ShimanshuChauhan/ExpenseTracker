@@ -4,6 +4,7 @@ import dotenv from 'dotenv';
 dotenv.config({ path: './config.env' });
 
 import userRouter from './routes/userRouter.js';
+import expenseRouter from './routes/expenseRouter.js';
 import AppError from './utils/appError.js';
 import globalErrorHandler from './controllers/errorController.js';
 
@@ -24,6 +25,7 @@ app.get('/test', (req, res) => {
 });
 
 app.use('/api/v1/users', userRouter);
+app.use('/api/v1/expenses', expenseRouter);
 
 app.all(/(.*)/, (req, res, next) => {
   next(new AppError(`Can't find ${req.originalUrl} on this server!`, 404));
