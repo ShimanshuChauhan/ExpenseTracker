@@ -1,4 +1,5 @@
 import type React from "react";
+import { NavLink } from "react-router-dom";
 
 type SidebarProps = {
   children: React.ReactNode
@@ -34,12 +35,15 @@ export function Sidebar({ children }: SidebarProps) {
 type SidebarItemProps = {
   icon: React.ElementType,
   text: string
+  to: string
 }
-export function SidebarItem({ icon: Icon, text }: SidebarItemProps) {
+export function SidebarItem({ icon: Icon, text, to }: SidebarItemProps) {
   return (
-    <li className="flex gap-2 p-4 hover:bg-blue-200 hover:text-blue-600 cursor-pointer rounded-md">
-      <Icon size={30} />
-      <span className="text-lg font-medium">{text}</span>
+    <li>
+      <NavLink to={to} className={`flex gap-2 p-4 hover:bg-blue-200 hover:text-blue-600 cursor-pointer rounded-md transition-colors duration-200 ease-in-out`}>
+        <Icon size={30} />
+        <span className="text-lg font-medium">{text}</span>
+      </NavLink>
     </li>
   );
 }
