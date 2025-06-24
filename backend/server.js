@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
-import dotnev from 'dotenv';
-dotnev.config({ path: './config.env' });
+import dotenv from 'dotenv';
+dotenv.config({ path: './config.env' });
 
 process.on('uncaughtException', (err) => {
   console.log('UNCAUGHT EXCEPTION! 💥 Shutting down...');
@@ -19,7 +19,6 @@ const clientOptions = { serverApi: { version: '1', strict: true, deprecationErro
 
 mongoose.connect(DB, clientOptions)
   .then(() => console.log('DB connection successful!'));
-
 
 const port = process.env.PORT || 3000;
 const server = app.listen(port, () => {
