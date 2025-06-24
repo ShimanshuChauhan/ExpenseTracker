@@ -56,3 +56,32 @@ export const getExpenseById = catchAsync(async (req, res, next) => {
     }
   });
 });
+
+export const updateExpense = catchAsync(async (req, res, next) => {
+  const { amount, description, category, date } = req.body;
+  const expenseId = req.params.id;
+  const expense = await expenseModel.findById(expenseId);
+
+  if (!expense) {
+    return next(new AppError('No expense found with that ID', 404));
+  }
+
+  if (expense.user.toString() !== req.user.id) {
+    return next(new AppError('You do not have permission to update this expense', 403));
+  }
+
+  const updateData = {};
+  if (amount) { updateData.amount = amount; }
+  if (description) { updateData.description = description; }
+  if (category) { updateData.category = category; }
+  if (date) { updateData.date = new Date(date); }
+
+  const updatedExpense = await expenseModel.findByIdAndUpdate(expenseId, updateData, { new: true, runValidators: true });
+
+  res.status(200).json({
+    status: 'success',
+    data: {
+      expense: updatedExpense
+    }
+  });
+});
