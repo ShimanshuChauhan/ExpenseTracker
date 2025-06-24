@@ -29,12 +29,7 @@ const expenseSchema = new mongoose.Schema({
   date: {
     type: Date,
     required: true
-  },
-
-  createdAt: {
-    type: Date,
-    default: Date.now
   }
-});
+}, { timestamps: true });
 
 export default mongoose.model('Expense', expenseSchema);
