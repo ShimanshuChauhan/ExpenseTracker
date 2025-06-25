@@ -1,6 +1,7 @@
 import express from 'express';
 import morgan from 'morgan';
 import dotenv from 'dotenv';
+import cors from 'cors';
 dotenv.config({ path: './config.env' });
 
 import userRouter from './routes/userRouter.js';
@@ -9,6 +10,11 @@ import AppError from './utils/appError.js';
 import globalErrorHandler from './controllers/errorController.js';
 
 const app = express();
+
+app.use(cors({
+  origin: 'http://localhost:5173', // Vite default port
+  credentials: true
+}));
 
 app.use(morgan('dev'));
 

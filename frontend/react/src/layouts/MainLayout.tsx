@@ -2,7 +2,7 @@ import { LayoutDashboard, Wallet, Settings } from "lucide-react";
 
 import { Sidebar, SidebarItem } from "../components/Sidebar";
 import { Outlet } from "react-router-dom";
-export function MainLayout() {
+export default function MainLayout() {
   return (
     <div className="flex h-screen w-screen">
       <Sidebar>

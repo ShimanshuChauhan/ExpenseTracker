@@ -1,7 +1,14 @@
+import axios from "../api/axios";
+
 import { useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../auth/useAuth";
 
-export default function Signup() {
+
+export default function Authpage() {
+  const { login } = useAuth();
+  const navigate = useNavigate();
   const [isLogin, setIsLogin] = useState(true);
   const [formData, setFormData] = useState({
     name: "",
@@ -15,14 +22,37 @@ export default function Signup() {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
     if (!isLogin && formData.password !== formData.confirmPassword) {
       toast.error("Passwords do not match!");
       return;
     }
-    console.log("Form submitted:", formData);
+
+    try {
+      const res = await axios.post(
+        isLogin ? "/users/login" : "/users/signup",
+        isLogin
+          ? {
+            email: formData.email,
+            password: formData.password,
+          }
+          : {
+            name: formData.name,
+            email: formData.email,
+            password: formData.password,
+            confirmPassword: formData.confirmPassword,
+          }
+      );
+      login(res.data.token, res.data.data.user); // ✅ use context login
+      toast.success(`${isLogin ? "Logged in" : "Signed up"} successfully!`);
+      navigate("/dashboard");
+    } catch (err: any) {
+      toast.error(err.response.data.message);
+    }
   };
+
 
   return (
     <div className="min-h-screen flex items-center justify-center px-4 sm:px-6 bg-gray-50">
