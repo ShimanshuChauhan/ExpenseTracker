@@ -1,5 +1,6 @@
 import { CirclePlus } from "lucide-react";
 import ExpenseTable from "../components/ExpenseTable";
+import ExpenseItem from "../components/ExpenseItem";
 import { useState } from "react";
 import AddExpense from "../components/AddExpense";
 import UpdateExpense from "../components/UpdateExpense";
@@ -14,13 +15,20 @@ const dummyExpenses = [
 
 
 export default function Expenses() {
-  const [isAddOpen, setIsAddOpen] = useState(false);
+  const [isAddOpen, setIsAddOpen] = useState<boolean>(false);
+  const [isUpdateOpen, setIsUpdateOpen] = useState<boolean>(false);
+  const [updateIdx, setUpdateIdx] = useState<number>(-1);
+
   const handleIsAddOpen = (open: boolean) => setIsAddOpen(open);
+  const handleIsUpdateOpen = (open: boolean, idx: number) => {
+    setIsUpdateOpen(open);
+    setUpdateIdx(idx);
+  };
 
   return (
     <div className="rounded-lg shadow-md h-full relative">
       {/* Main content wrapper */}
-      <div className={isAddOpen ? "blur-sm pointer-events-none select-none transition duration-300" : "transition duration-300"}>
+      <div className={isAddOpen || isUpdateOpen ? "blur-sm pointer-events-none select-none transition duration-300" : "transition duration-300"}>
         <div className="flex justify-between p-4">
           <h1 className="text-xl font-bold">Expenses</h1>
           <div className="flex gap-4">
@@ -35,13 +43,29 @@ export default function Expenses() {
         </div>
 
         <div className="w-full p-4">
-          <ExpenseTable expenses={dummyExpenses} />
+          <ExpenseTable>
+            {dummyExpenses.map((exp, idx) => (
+              <ExpenseItem
+                key={idx}
+                idx={idx}
+                exp={exp}
+                onUpdate={handleIsUpdateOpen}
+              />
+            ))}
+
+          </ExpenseTable>
         </div>
       </div>
 
       {/* Overlay panel/modal */}
       {isAddOpen && (
         <AddExpense onOpen={handleIsAddOpen} />
+      )}
+      {isUpdateOpen && (
+        <UpdateExpense
+          onUpdate={handleIsUpdateOpen}
+          initialData={dummyExpenses[updateIdx]}
+        />
       )}
     </div>
   );

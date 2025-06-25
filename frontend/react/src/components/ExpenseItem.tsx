@@ -1,11 +1,12 @@
 type ExpenseItemProps = {
-  idx: number;
+  idx: number,
   exp: {
     date: string;
     description: string;
     amount: number;
     category: string;
-  };
+  },
+  onUpdate: (open: boolean, idx: number) => void;
 };
 
 const categoryColors: Record<string, string> = {
@@ -18,12 +19,13 @@ const categoryColors: Record<string, string> = {
   Other: "bg-gray-100 text-gray-800",
 };
 
-export default function ExpenseItem({ idx, exp }: ExpenseItemProps) {
+export default function ExpenseItem({ idx, exp, onUpdate }: ExpenseItemProps) {
 
   return (
     <tr
       key={idx}
       className={`transition-colors duration-150 ${idx % 2 === 0 ? "bg-white" : "bg-gray-50"} hover:bg-blue-100 cursor-pointer`}
+      onClick={() => onUpdate(true, idx)}
     >
       <td className="px-1 py-1 sm:px-3 sm:py-2 md:px-6 md:py-4 font-medium text-gray-600">
         {new Date(exp.date).toLocaleDateString("en-IN", {

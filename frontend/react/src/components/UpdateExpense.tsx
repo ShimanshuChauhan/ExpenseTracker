@@ -1,19 +1,17 @@
 import { useState } from 'react';
 
-type ExpenseFormData = {
-  date: string;
-  description: string;
-  amount: string;
-  category: string;
-};
-
 type UpdateExpenseProps = {
-  onOpen: (open: boolean) => void;
-  initialData: ExpenseFormData;
+  onUpdate: (open: boolean, idx: number) => void;
+  initialData: {
+    date: string;
+    description: string;
+    amount: number;
+    category: string;
+  };
 }
 
-export default function UpdateExpense({ onOpen, initialData }: UpdateExpenseProps) {
-  const [formData, setFormData] = useState<ExpenseFormData>(initialData);
+export default function UpdateExpense({ onUpdate, initialData }: UpdateExpenseProps) {
+  const [formData, setFormData] = useState(initialData);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
@@ -25,7 +23,7 @@ export default function UpdateExpense({ onOpen, initialData }: UpdateExpenseProp
     e.preventDefault();
     console.log("Submitted Expense:", formData);
     // TODO: send to backend or parent component
-    onOpen(false);
+    onUpdate(false, -1);
   };
 
   return (
@@ -96,16 +94,24 @@ export default function UpdateExpense({ onOpen, initialData }: UpdateExpenseProp
         <div className="flex justify-end gap-2 pt-2">
           <button
             type="button"
-            onClick={() => onOpen(false)}
+            onClick={() => onUpdate(false, -1)}
             className="px-3 sm:px-4 py-1.5 sm:py-2 bg-gray-200 text-gray-700 text-sm rounded-md hover:bg-gray-300"
           >
             Cancel
           </button>
           <button
             type="submit"
+            value={"Add Expense"}
             className="px-3 sm:px-4 py-1.5 sm:py-2 bg-blue-600 text-white text-sm rounded-md hover:bg-blue-700"
           >
-            Add Expense
+            Update Expense
+          </button>
+          <button
+            type="submit"
+            value={"Delete Expense"}
+            className="px-3 sm:px-4 py-1.5 sm:py-2 bg-red-600 text-white text-sm rounded-md hover:bg-red-700"
+          >
+            Delete Expense
           </button>
         </div>
       </form>

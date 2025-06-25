@@ -1,19 +1,10 @@
-import ExpenseItem from "./ExpenseItem";
 
 export default function ExpenseTable({
-  expenses
+  children,
 }: {
-  expenses: {
-    date: string;
-    description: string;
-    amount: number;
-    category: string;
-  }[],
-}
-) {
-
+  children: React.ReactNode;
+}) {
   return (
-
     <div className="rounded-lg shadow-sm border border-gray-200 bg-white w-full overflow-x-auto">
       <table className="min-w-full table-auto border-collapse text-[11px] sm:text-sm md:text-base">
         <thead className="bg-blue-50 text-gray-700 font-semibold">
@@ -25,13 +16,7 @@ export default function ExpenseTable({
           </tr>
         </thead>
         <tbody>
-          {expenses.map((exp, idx) => (
-            <ExpenseItem
-              key={idx}
-              idx={idx}
-              exp={exp}
-            />
-          ))}
+          {children}
         </tbody>
       </table>
     </div>
