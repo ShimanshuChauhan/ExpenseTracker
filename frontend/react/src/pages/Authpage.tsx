@@ -45,7 +45,7 @@ export default function Authpage() {
             confirmPassword: formData.confirmPassword,
           }
       );
-      login(res.data.token, res.data.data.user); // ✅ use context login
+      login(res.data.token, res.data.data.user);
       toast.success(`${isLogin ? "Logged in" : "Signed up"} successfully!`);
       navigate("/dashboard");
     } catch (err: any) {

@@ -1,23 +1,25 @@
+import { useState, useEffect } from "react";
 import { CirclePlus } from "lucide-react";
 import ExpenseTable from "../components/ExpenseTable";
 import ExpenseItem from "../components/ExpenseItem";
-import { useState } from "react";
 import AddExpense from "../components/AddExpense";
 import UpdateExpense from "../components/UpdateExpense";
+import axios from "../api/axios"; // 👈 make sure your axios instance is here
+import { toast, ToastContainer } from "react-toastify";
 
-const dummyExpenses = [
-  { date: "2025-06-24", description: "Lunch at Subway", amount: 220, category: "Food" },
-  { date: "2025-06-24", description: "Uber to Office", amount: 180, category: "Transport" },
-  { date: "2025-06-23", description: "Amazon - Headphones", amount: 1299, category: "Shopping" },
-  { date: "2025-06-22", description: "Groceries", amount: 450, category: "Essentials" },
-  { date: "2025-06-21", description: "Movie ticket", amount: 300, category: "Entertainment" },
-];
-
+type Expense = {
+  _id: string;
+  amount: number;
+  description: string;
+  category: string;
+  date: string;
+};
 
 export default function Expenses() {
-  const [isAddOpen, setIsAddOpen] = useState<boolean>(false);
-  const [isUpdateOpen, setIsUpdateOpen] = useState<boolean>(false);
-  const [updateIdx, setUpdateIdx] = useState<number>(-1);
+  const [expenses, setExpenses] = useState<Expense[]>([]);
+  const [isAddOpen, setIsAddOpen] = useState(false);
+  const [isUpdateOpen, setIsUpdateOpen] = useState(false);
+  const [updateIdx, setUpdateIdx] = useState(-1);
 
   const handleIsAddOpen = (open: boolean) => setIsAddOpen(open);
   const handleIsUpdateOpen = (open: boolean, idx: number) => {
@@ -25,46 +27,64 @@ export default function Expenses() {
     setUpdateIdx(idx);
   };
 
+  // ✅ Fetch expenses from backend
+  const fetchExpenses = async () => {
+    try {
+      const res = await axios.get("/expenses"); // Your backend route
+      setExpenses(res.data.data.expenses); // Adjust based on response shape
+    } catch (err) {
+      console.error("Failed to fetch expenses:", err);
+    }
+  };
+
+  useEffect(() => {
+    fetchExpenses();
+  }, []);
+
   return (
-    <div className="rounded-lg shadow-md h-full relative">
-      {/* Main content wrapper */}
-      <div className={isAddOpen || isUpdateOpen ? "blur-sm pointer-events-none select-none transition duration-300" : "transition duration-300"}>
+    <div className="rounded-lg shadow-md relative">
+      {/* Main content */}
+      <div
+        className={
+          isAddOpen || isUpdateOpen
+            ? "blur-sm pointer-events-none select-none transition duration-300"
+            : "transition duration-300"
+        }
+      >
         <div className="flex justify-between p-4">
           <h1 className="text-xl font-bold">Expenses</h1>
-          <div className="flex gap-4">
-            <button
-              onClick={() => handleIsAddOpen(true)}
-              className="inline-flex items-center gap-2 bg-blue-500 text-white font-bold px-4 py-2 rounded-md hover:bg-blue-300 hover:text-blue-500 transition-colors duration-200"
-            >
-              <CirclePlus size={24} />
-              New Expense
-            </button>
-          </div>
+          <button
+            onClick={() => handleIsAddOpen(true)}
+            className="inline-flex items-center gap-2 bg-blue-500 text-white font-bold px-4 py-2 rounded-md hover:bg-blue-300 hover:text-blue-500 transition-colors duration-200"
+          >
+            <CirclePlus size={24} />
+            New Expense
+          </button>
         </div>
 
         <div className="w-full p-4">
           <ExpenseTable>
-            {dummyExpenses.map((exp, idx) => (
+            {expenses.map((exp, idx) => (
               <ExpenseItem
-                key={idx}
+                key={exp._id}
                 idx={idx}
                 exp={exp}
                 onUpdate={handleIsUpdateOpen}
               />
             ))}
-
           </ExpenseTable>
         </div>
       </div>
 
-      {/* Overlay panel/modal */}
+      {/* Add and Update Modals */}
       {isAddOpen && (
-        <AddExpense onOpen={handleIsAddOpen} />
+        <AddExpense onOpen={handleIsAddOpen} onAdd={fetchExpenses} />
       )}
-      {isUpdateOpen && (
+      {isUpdateOpen && expenses[updateIdx] && (
         <UpdateExpense
           onUpdate={handleIsUpdateOpen}
-          initialData={dummyExpenses[updateIdx]}
+          initialData={expenses[updateIdx]}
+          onSuccess={fetchExpenses}
         />
       )}
     </div>
