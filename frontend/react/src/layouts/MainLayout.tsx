@@ -10,7 +10,7 @@ export function MainLayout() {
         <SidebarItem icon={Wallet} text="Expenses" to="expenses" />
         <SidebarItem icon={Settings} text="Settings" to="settings" />
       </Sidebar>
-      <main>
+      <main className="flex-1 p-2 overflow-x-hidden">
         <Outlet />
       </main>
     </div>

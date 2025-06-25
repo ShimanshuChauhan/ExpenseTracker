@@ -7,7 +7,7 @@ type SidebarProps = {
 
 export function Sidebar({ children }: SidebarProps) {
   return (
-    <aside className="h-screen w-80 border-r border-gray-300 shadow-md">
+    <aside className="h-full w-80 border-r border-gray-300 shadow-md">
       <nav className="flex flex-col gap-2 h-full">
         <div className="p-2 flex items-center justify-left gap-2">
           <img src="https://upload.wikimedia.org/wikipedia/commons/5/52/Free_logo.svg" alt="" className="w-32" />
@@ -40,7 +40,7 @@ type SidebarItemProps = {
 export function SidebarItem({ icon: Icon, text, to }: SidebarItemProps) {
   return (
     <li>
-      <NavLink to={to} className={`flex gap-2 p-4 hover:bg-blue-200 hover:text-blue-600 cursor-pointer rounded-md transition-colors duration-200 ease-in-out`}>
+      <NavLink to={to} className={({ isActive }) => `flex items-center gap-2 p-4 rounded-md ${isActive ? 'bg-blue-500 text-white' : 'text-gray-700 hover:bg-blue-300 hover:text-blue-600'}`}>
         <Icon size={30} />
         <span className="text-lg font-medium">{text}</span>
       </NavLink>
