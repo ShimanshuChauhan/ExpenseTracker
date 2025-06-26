@@ -33,7 +33,7 @@ export default function Expenses() {
       const res = await axios.get("/expenses"); // Your backend route
       setExpenses(res.data.data.expenses); // Adjust based on response shape
     } catch (err) {
-      console.error("Failed to fetch expenses:", err);
+      toast.error("Failed to fetch expenses. Please try again later.");
     }
   };
 

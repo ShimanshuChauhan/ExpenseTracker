@@ -1,6 +1,7 @@
 import expenseModel from '../models/expenseModel.js';
 import catchAsync from '../utils/catchAsync.js';
 import AppError from '../utils/appError.js';
+import { mongoose } from 'mongoose';
 
 export const getAllExpenses = catchAsync(async (req, res, next) => {
   const expenses = await expenseModel.find({ user: req.user.id }).sort({ date: -1 });
@@ -103,5 +104,68 @@ export const deleteExpense = catchAsync(async (req, res, next) => {
   res.status(204).json({
     status: 'success',
     data: null
+  });
+});
+
+export const getExpenseSummary = catchAsync(async (req, res, next) => {
+  const userId = req.user.id;
+  const { range } = req.query;
+
+  let startDate = new Date();
+  let groupFormat = '%Y-%m-%d';
+
+  if (range === 'weekly') {
+    startDate.setDate(startDate.getDate() - 6);
+  } else if (range === 'monthly') {
+    startDate.setDate(startDate.getDate() - 29);
+  } else if (range === '6months') {
+    startDate.setMonth(startDate.getMonth() - 5);
+    groupFormat = '%Y-%m';
+  } else {
+    return next(new AppError('Invalid range parameter', 400));
+  }
+
+  const summary = await expenseModel.aggregate([
+    {
+      $match: {
+        user: new mongoose.Types.ObjectId(userId),
+        date: { $gte: startDate }
+      }
+    },
+    {
+      $group: {
+        _id: { $dateToString: { format: groupFormat, date: '$date' } },
+        total: { $sum: '$amount' }
+      }
+    },
+    {
+      $sort: { _id: 1 }
+    },
+    {
+      $group: {
+        _id: null,
+        summary: {
+          $push: {
+            date: '$_id',
+            total: '$total'
+          }
+        },
+        totalExpense: { $sum: '$total' }
+      }
+    },
+    {
+      $project: {
+        _id: 0,
+        summary: 1,
+        totalExpense: 1
+      }
+    }
+  ]);
+
+  res.status(200).json({
+    status: 'success',
+    data: {
+      summary
+    }
   });
 });
