@@ -63,8 +63,8 @@ A modern full-stack **Expense Tracker Dashboard** built using **React (TypeScrip
 
 | Method | Route         | Description         |
 |--------|---------------|---------------------|
-| POST   | `/auth/signup`| Register new user   |
-| POST   | `/auth/login` | Login existing user |
+| POST   | `/users/signup`| Register new user   |
+| POST   | `/users/login` | Login existing user |
 
 ---
 
@@ -74,6 +74,7 @@ A modern full-stack **Expense Tracker Dashboard** built using **React (TypeScrip
 |--------|------------------------|------------------------------|
 | GET    | `/expenses`            | Get all expenses (sorted)    |
 | POST   | `/expenses`            | Add a new expense            |
+| GET    | `/expenses/:id`        | Get expense by ID            |
 | PATCH  | `/expenses/:id`        | Update expense by ID         |
 | DELETE | `/expenses/:id`        | Delete expense by ID         |
 
@@ -174,7 +175,7 @@ ExpenseTracker/
 │   ├── routes/             # Route handlers
 │   ├── middleware/         # JWT/auth utilities
 │   ├── utils/              # Error handling utils
-│   ├── app.js
+│   ├── app.js              # App configuration file (CORS, middlewares, routing)
 │   ├── server.js           # App entry point
 │
 ├── frontend/
@@ -194,7 +195,7 @@ ExpenseTracker/
 
 > Developed by **Shimanshu Chauhan**
 > GitHub: [@ShimanshuChauhan](https://github.com/ShimanshuChauhan)
-> Email: `shivanshuchuhan699@gmail.com`
+> Email: `shivanshuchauhan699@gmail.com`
 > Made with ❤️ and clean code.
 
 ---
