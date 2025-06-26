@@ -56,7 +56,6 @@ export default function Authpage() {
 
   return (
     <div className="min-h-screen flex items-center justify-center px-4 sm:px-6 bg-gray-50">
-      <ToastContainer />
       <div className="w-full max-w-sm sm:max-w-md md:max-w-lg bg-white shadow-md rounded-xl p-6 sm:p-8 md:p-10">
         <h2 className="text-2xl sm:text-3xl font-bold text-center text-gray-800 mb-2">
           {isLogin ? "Welcome Back!" : "Create Your Account"}

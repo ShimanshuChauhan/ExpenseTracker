@@ -169,3 +169,54 @@ export const getExpenseSummary = catchAsync(async (req, res, next) => {
     }
   });
 });
+
+export const getExpenseSummaryByCategory = catchAsync(async (req, res, next) => {
+  const userId = req.user.id;
+  const { range } = req.query;
+
+  let startDate = new Date();
+  if (range === 'weekly') {
+    startDate.setDate(startDate.getDate() - 6);
+  } else if (range === 'monthly') {
+    startDate.setDate(startDate.getDate() - 29);
+  } else if (range === '6months') {
+    startDate.setMonth(startDate.getMonth() - 5);
+  } else {
+    return next(new AppError('Invalid range parameter', 400));
+  }
+
+  const summary = await expenseModel.aggregate([
+    {
+      $match: {
+        user: new mongoose.Types.ObjectId(userId),
+        date: { $gte: startDate }
+      }
+    },
+    {
+      $group: {
+        _id: '$category',
+        total: { $sum: '$amount' }
+      }
+    },
+    {
+      $sort: { total: -1 }
+    },
+    {
+      $project: {
+        _id: 0,
+        category: '$_id',
+        total: 1
+      }
+    }
+  ]);
+
+  const totalExpense = summary.reduce((sum, cat) => sum + cat.total, 0);
+
+  res.status(200).json({
+    status: 'success',
+    data: {
+      summary,
+      totalExpense
+    }
+  });
+});

@@ -31,7 +31,7 @@ export default function Expenses() {
   const fetchExpenses = async () => {
     try {
       const res = await axios.get("/expenses"); // Your backend route
-      setExpenses(res.data.data.expenses); // Adjust based on response shape
+      setExpenses(res?.data?.data?.expenses || []); // Adjust based on response shape
     } catch (err) {
       toast.error("Failed to fetch expenses. Please try again later.");
     }
@@ -61,19 +61,23 @@ export default function Expenses() {
             New Expense
           </button>
         </div>
+        {expenses.length === 0 ? (
+          <div className="text-red-500 text-lg font-semibold p-2">Add at least one expense.</div>
+        ) : (
+          <div className="w-full p-4">
+            <ExpenseTable>
+              {expenses.map((exp, idx) => (
+                <ExpenseItem
+                  key={exp._id}
+                  idx={idx}
+                  exp={exp}
+                  onUpdate={handleIsUpdateOpen}
+                />
+              ))}
+            </ExpenseTable>
+          </div>
+        )}
 
-        <div className="w-full p-4">
-          <ExpenseTable>
-            {expenses.map((exp, idx) => (
-              <ExpenseItem
-                key={exp._id}
-                idx={idx}
-                exp={exp}
-                onUpdate={handleIsUpdateOpen}
-              />
-            ))}
-          </ExpenseTable>
-        </div>
       </div>
 
       {/* Add and Update Modals */}
