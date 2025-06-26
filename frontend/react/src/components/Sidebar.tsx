@@ -7,7 +7,7 @@ type SidebarProps = {
 };
 
 export function Sidebar({ children }: SidebarProps) {
-  const { user }: { user: { name: string; email: string } } = useAuth();
+  const { user } = useAuth();
   return (
     <aside className="h-full w-80 border-r border-gray-300 shadow-md">
       <nav className="flex flex-col gap-2 h-full">
@@ -25,8 +25,8 @@ export function Sidebar({ children }: SidebarProps) {
         <div className="p-4 flex items-center justify-start gap-4">
           <img src="https://images.unsplash.com/photo-1531123897727-8f129e1688ce" alt="" className="w-13 h-13 rounded-full object-cover" />
           <div className="flex flex-col justify-center items-start">
-            <p className="text-lg font-semibold">{user.name}</p>
-            <p>{user.email.length > 19 ? user.email.substring(0, 19) + "..." : user.email}</p>
+            <p className="text-lg font-semibold">{user ? user.name : "Guest"}</p>
+            <p>{user ? (user.email.length > 19 ? user.email.substring(0, 19) + "..." : user.email) : ""}</p>
           </div>
         </div>
       </nav>
