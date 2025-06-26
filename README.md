@@ -111,6 +111,7 @@ npm install
 
 ```bash
 cd frontend
+cd react
 npm install
 ```
 
@@ -152,11 +153,13 @@ npm run dev
 
 ```bash
 cd frontend
+cd react
 npm run dev
 ```
 
 * Frontend: `http://localhost:5173`
 * Backend: `http://localhost:3000`
+* ensure that the apps are running on the specified ports otherwise they won't work
 
 ---
 
